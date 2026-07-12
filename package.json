@@ -22,10 +22,12 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "vite": "^6.3.5"
+  },
+  "optionalDependencies": {
     "concurrently": "^10.0.3",
     "electron": "^35.2.1",
     "electron-builder": "^26.0.12",
-    "vite": "^6.3.5",
     "wait-on": "^9.0.10"
   },
   "build": {

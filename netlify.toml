@@ -1,9 +1,9 @@
 [build]
-  command = "npm run build"
+  command = "npm install --omit=optional && npm run build"
   publish = "dist"
 
 [build.environment]
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1"
+  NODE_VERSION = "20"
 
 [[redirects]]
   from = "/*"
