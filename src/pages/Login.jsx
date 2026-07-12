@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { signIn } from '../utils/auth'
-import steve from '../assets/steve.webp'
 import './Login.css'
-
-const isElectron = !!window.electronAPI
 
 export default function Login() {
   const { setUser } = useAuth()
@@ -32,16 +29,6 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <div className="login-hero">
-        <img src={steve} alt="Steve" className="login-logo" />
-        <h1>MC-Launcher</h1>
-        <p className="login-subtitle">Minecraft Launcher</p>
-        {!isElectron && (
-          <a href="https://github.com/roloar7/MC-Launcher/releases/download/v1.0.0/MC-Launcher.Setup.1.0.0.exe" download className="download-btn">
-            Descargar Launcher
-          </a>
-        )}
-      </div>
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Iniciar Sesion</h2>
 

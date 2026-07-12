@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
+const { initUpdater } = require('./updater.cjs')
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -17,6 +18,7 @@ function createWindow() {
 
   if (app.isPackaged) {
     win.loadFile(path.join(__dirname, '..', 'dist', 'index.html'))
+    initUpdater(win)
   } else {
     win.loadURL('http://localhost:5173')
     win.webContents.openDevTools()

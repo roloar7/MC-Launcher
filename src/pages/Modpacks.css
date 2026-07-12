@@ -2,13 +2,85 @@
   width: 100%;
   max-width: 800px;
   margin-top: 20px;
-  text-align: center;
+  text-align: left;
 }
 
 .modpacks-container h2 {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
-.modpacks-container p {
+.modpacks-loading,
+.modpacks-empty {
   color: var(--text-muted);
+  font-size: var(--fs-base);
+}
+
+.modpacks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.modpack-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--transition-fast);
+}
+
+.modpack-card:hover {
+  border-color: var(--color-primary);
+}
+
+.modpack-banner {
+  height: 120px;
+  background: linear-gradient(135deg, #646cff, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.modpack-info {
+  padding: 16px;
+  flex: 1;
+}
+
+.modpack-info h3 {
+  margin: 0 0 8px 0;
+  font-size: var(--fs-md);
+}
+
+.modpack-info p {
+  margin: 0 0 10px 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}
+
+.modpack-meta {
+  color: var(--text-subtle);
+  font-size: var(--fs-xs);
+}
+
+.modpack-install {
+  margin: 0 16px 16px;
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.modpack-install:hover {
+  background: var(--color-primary-hover);
 }

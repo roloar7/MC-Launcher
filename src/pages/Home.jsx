@@ -7,6 +7,8 @@ import Servidor from './Servidor'
 import steve from '../assets/steve.webp'
 import './Home.css'
 
+const isElectron = !!window.electronAPI
+
 export default function Home() {
   const { user, setUser } = useAuth()
   const [page, setPage] = useState('home')
@@ -58,6 +60,11 @@ export default function Home() {
           <>
             <p>Bienvenido, <strong>{user?.username || user?.email}</strong></p>
             <p>Rol: <strong>{user?.role}</strong></p>
+            {!isElectron && (
+              <a href="https://github.com/roloar7/MC-Launcher/releases/download/v1.0.0/MC-Launcher%20Setup%201.0.0.exe" download className="download-btn-home">
+                Descargar Launcher
+              </a>
+            )}
           </>
         )}
         {page === 'modpacks' && <Modpacks />}

@@ -9,6 +9,32 @@
   margin-bottom: 16px;
 }
 
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.admin-tabs button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--bg-nav);
+  color: var(--text-secondary);
+  font-size: var(--fs-base);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.admin-tabs button:hover {
+  background: var(--bg-nav-hover);
+}
+
+.admin-tabs button.active {
+  background: var(--color-primary);
+  color: var(--text-primary);
+}
+
 .admin-panel table {
   width: 100%;
   border-collapse: collapse;
@@ -60,4 +86,97 @@
 .admin-panel .error {
   color: var(--color-danger);
   font-size: var(--fs-sm);
+}
+
+.modpack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+
+.modpack-form input {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  outline: none;
+}
+
+.modpack-form input:focus {
+  border-color: var(--color-primary);
+}
+
+.modpack-form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.modpack-form-row input {
+  flex: 1;
+}
+
+.modpack-form button {
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-success);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.modpack-form button:hover {
+  background: var(--color-success-hover);
+}
+
+.modpacks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.no-data {
+  color: var(--text-muted);
+}
+
+.modpack-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.modpack-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modpack-item-info span {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.btn-delete {
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-danger);
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: var(--color-danger-hover);
 }
