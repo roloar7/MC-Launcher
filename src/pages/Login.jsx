@@ -35,10 +35,10 @@ export default function Login() {
       <div className="login-hero">
         <img src={steve} alt="Steve" className="login-logo" />
         <h1>MC-Launcher</h1>
-        <p className="login-subtitle">Tu launcher de Minecraft</p>
+        <p className="login-subtitle">Minecraft Launcher</p>
         {!isElectron && (
           <a href="/release/MC-Launcher Setup.exe" download className="download-btn">
-            Descargar Aplicacion
+            Descargar Launcher
           </a>
         )}
       </div>
