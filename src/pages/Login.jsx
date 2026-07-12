@@ -37,7 +37,7 @@ export default function Login() {
         <h1>MC-Launcher</h1>
         <p className="login-subtitle">Minecraft Launcher</p>
         {!isElectron && (
-          <a href="/release/MC-Launcher Setup.exe" download className="download-btn">
+          <a href="https://github.com/roloar7/MC-Launcher/releases/download/v1.0.0/MC-Launcher%20Setup%201.0.0.exe" download className="download-btn">
             Descargar Launcher
           </a>
         )}
