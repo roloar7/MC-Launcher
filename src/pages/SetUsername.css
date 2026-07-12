@@ -1,0 +1,55 @@
+.set-username-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.set-username-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2rem;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  min-width: 300px;
+}
+
+.set-username-form input {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  outline: none;
+}
+
+.set-username-form input:focus {
+  border-color: var(--color-primary);
+}
+
+.set-username-form button {
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  cursor: pointer;
+}
+
+.set-username-form button:hover {
+  background: var(--color-primary-hover);
+}
+
+.set-username-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.set-username-form .error {
+  color: var(--color-danger);
+  font-size: var(--fs-sm);
+  margin: 0;
+}

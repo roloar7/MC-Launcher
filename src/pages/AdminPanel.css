@@ -1,0 +1,63 @@
+.admin-panel {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.admin-panel h2 {
+  margin-bottom: 16px;
+}
+
+.admin-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.admin-panel th,
+.admin-panel td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.admin-panel th {
+  background: var(--bg-table-header);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+}
+
+.admin-panel select {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.role-badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: bold;
+}
+
+.role-badge.admin {
+  background: var(--badge-admin-bg);
+  color: var(--badge-admin-text);
+}
+
+.role-badge.user {
+  background: var(--badge-user-bg);
+  color: var(--badge-user-text);
+}
+
+.admin-panel .error {
+  color: var(--color-danger);
+  font-size: var(--fs-sm);
+}

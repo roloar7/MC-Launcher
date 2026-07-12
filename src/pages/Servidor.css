@@ -1,0 +1,145 @@
+.servidor-container {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.servidor-container h2 {
+  margin-bottom: 16px;
+}
+
+.servidor-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-loading);
+}
+
+.status-dot.online {
+  background: var(--color-success);
+  box-shadow: 0 0 8px var(--color-success-glow);
+}
+
+.status-dot.offline {
+  background: var(--color-danger);
+}
+
+.status-dot.starting,
+.status-dot.stopping {
+  background: var(--color-warning);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.status-text {
+  font-size: var(--fs-md);
+  font-weight: bold;
+}
+
+.servidor-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.servidor-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.servidor-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-start {
+  background: var(--color-success);
+}
+
+.btn-start:hover:not(:disabled) {
+  background: var(--color-success-hover);
+}
+
+.btn-stop {
+  background: var(--color-danger);
+}
+
+.btn-stop:hover:not(:disabled) {
+  background: var(--color-danger-hover);
+}
+
+.btn-restart {
+  background: var(--color-warning);
+  color: var(--bg-input);
+}
+
+.btn-restart:hover:not(:disabled) {
+  background: var(--color-warning-hover);
+}
+
+.btn-update {
+  background: var(--color-primary);
+}
+
+.btn-update:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.btn-loading {
+  background: var(--bg-loading);
+}
+
+.servidor-logs {
+  background: var(--bg-log);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.servidor-logs h3 {
+  margin: 0 0 12px 0;
+  font-size: var(--fs-base);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.logs-content {
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+.no-logs {
+  color: var(--bg-loading);
+  margin: 0;
+}
+
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color-dark);
+  color: var(--text-log);
+}
+
+.log-time {
+  color: var(--text-log-time);
+  margin-right: 8px;
+}

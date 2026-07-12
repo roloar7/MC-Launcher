@@ -1,0 +1,80 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.home-header h1 {
+  margin: 0;
+  font-size: var(--fs-xl);
+}
+
+.username-avatar-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  image-rendering: pixelated;
+  margin-left: 12px;
+}
+
+.home-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.home-nav button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--bg-nav);
+  color: var(--text-secondary);
+  font-size: var(--fs-base);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.home-nav button:hover {
+  background: var(--bg-nav-hover);
+}
+
+.home-nav button.active {
+  background: var(--color-primary);
+  color: var(--text-primary);
+}
+
+.home-nav button:last-child {
+  background: var(--color-danger-nav);
+  color: var(--text-primary);
+}
+
+.home-nav button:last-child:hover {
+  background: var(--color-danger-nav-hover);
+}
+
+.home-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.working {
+  font-size: xx-large;
+  font-weight: 600;
+}
