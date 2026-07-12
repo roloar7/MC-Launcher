@@ -20,16 +20,21 @@ function serveRelease() {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), serveRelease()],
-  base: './',
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+
+export default defineConfig(({ command, mode }) => {
+  const isWebBuild = process.env.NETLIFY === 'true' || mode === 'web';
+
+  return {
+    plugins: [react(), serveRelease()],
+    base: isWebBuild ? '/' : './', 
+    build: {
+      outDir: 'dist',
+      emptyOutDir: true,
     },
-  },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+  }
 })
