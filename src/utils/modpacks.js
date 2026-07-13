@@ -21,6 +21,16 @@ export async function addModpack({ name, description, image_url, minecraft_versi
   return { data }
 }
 
+export async function updateModpack(id, { name, description, image_url, minecraft_version, mod_count, loader, memory_min, memory_max }) {
+  const { error } = await supabase
+    .from('modpacks')
+    .update({ name, description, image_url, minecraft_version, mod_count, loader, memory_min, memory_max })
+    .eq('id', id)
+
+  if (error) return { error }
+  return { data: { id, name, description, image_url, minecraft_version, mod_count, loader, memory_min, memory_max } }
+}
+
 export async function deleteModpack(id) {
   await supabase.storage.from('modpacks').list(id)
   const { data: files } = await supabase.storage.from('modpacks').list(id)

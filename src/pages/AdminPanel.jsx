@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react'
 import { getAllProfiles, updateRole } from '../utils/auth'
-import { getModpacks, addModpack, deleteModpack, uploadModpackFiles } from '../utils/modpacks'
+import { getModpacks, addModpack, updateModpack, deleteModpack, uploadModpackFiles } from '../utils/modpacks'
 import './AdminPanel.css'
+
+const EMPTY_FORM = {
+  name: '',
+  description: '',
+  image_url: '',
+  minecraft_version: '',
+  mod_count: 0,
+  loader: 'forge',
+  memory_min: '2G',
+  memory_max: '4G',
+}
 
 export default function AdminPanel() {
   const [profiles, setProfiles] = useState([])
@@ -11,17 +22,9 @@ export default function AdminPanel() {
   const [tab, setTab] = useState('users')
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState('')
+  const [editing, setEditing] = useState(null)
 
-  const [form, setForm] = useState({
-    name: '',
-    description: '',
-    image_url: '',
-    minecraft_version: '',
-    mod_count: 0,
-    loader: 'forge',
-    memory_min: '2G',
-    memory_max: '4G',
-  })
+  const [form, setForm] = useState(EMPTY_FORM)
   const [folder, setFolder] = useState(null)
 
   useEffect(() => {
@@ -81,11 +84,71 @@ export default function AdminPanel() {
     }
 
     setModpacks([data, ...modpacks])
-    setForm({ name: '', description: '', image_url: '', minecraft_version: '', mod_count: 0, loader: 'forge', memory_min: '2G', memory_max: '4G' })
+    setForm(EMPTY_FORM)
+    setFolder(null)
+  }
+
+  async function handleUpdateModpack(e) {
+    e.preventDefault()
+    setError('')
+
+    if (!form.name.trim()) {
+      setError('El nombre es obligatorio.')
+      return
+    }
+
+    const { data, error } = await updateModpack(editing, form)
+    if (error) {
+      setError(error.message)
+      return
+    }
+
+    if (folder && folder.length > 0) {
+      setUploading(true)
+      setUploadProgress('Subiendo archivos...')
+
+      const { error: uploadError } = await uploadModpackFiles(editing, folder, (uploaded, total) => {
+        setUploadProgress(`Subiendo ${uploaded}/${total} archivos...`)
+      })
+
+      setUploading(false)
+      setUploadProgress('')
+
+      if (uploadError) {
+        setError(`Modpack actualizado pero error al subir archivos: ${uploadError.message}`)
+      }
+    }
+
+    setModpacks(modpacks.map(m => m.id === editing ? data : m))
+    setEditing(null)
+    setForm(EMPTY_FORM)
+    setFolder(null)
+  }
+
+  function handleEditModpack(mp) {
+    setEditing(mp.id)
+    setForm({
+      name: mp.name || '',
+      description: mp.description || '',
+      image_url: mp.image_url || '',
+      minecraft_version: mp.minecraft_version || '',
+      mod_count: mp.mod_count || 0,
+      loader: mp.loader || 'forge',
+      memory_min: mp.memory_min || '2G',
+      memory_max: mp.memory_max || '4G',
+    })
+    setFolder(null)
+  }
+
+  function handleCancelEdit() {
+    setEditing(null)
+    setForm(EMPTY_FORM)
     setFolder(null)
   }
 
   async function handleDeleteModpack(id) {
+    if (!confirm('¿Eliminar este modpack y todos sus archivos de Supabase?')) return
+
     const { error } = await deleteModpack(id)
     if (error) {
       setError(error.message)
@@ -93,6 +156,17 @@ export default function AdminPanel() {
     }
     setModpacks(modpacks.filter(m => m.id !== id))
   }
+
+  const MC_VERSIONS = [
+    '1.21.5','1.21.4','1.21.3','1.21.2','1.21.1','1.21',
+    '1.20.6','1.20.4','1.20.3','1.20.2','1.20.1','1.20',
+    '1.19.4','1.19.3','1.19.2','1.18.2','1.17.1',
+    '1.16.5','1.16.4','1.16.3','1.15.2','1.14.4',
+    '1.12.2','1.10.2','1.8.9',
+  ]
+
+  const RAM_MIN = ['512M','1G','2G','3G','4G','6G','8G']
+  const RAM_MAX = ['1G','2G','3G','4G','6G','8G','10G','12G','16G']
 
   if (loading) return <p>Cargando...</p>
 
@@ -153,7 +227,8 @@ export default function AdminPanel() {
 
       {tab === 'modpacks' && (
         <>
-          <form className="modpack-form" onSubmit={handleAddModpack}>
+          <form className="modpack-form" onSubmit={editing ? handleUpdateModpack : handleAddModpack}>
+            <h3>{editing ? 'Editar Modpack' : 'Agregar Modpack'}</h3>
             <input
               type="text"
               placeholder="Nombre del modpack"
@@ -180,31 +255,9 @@ export default function AdminPanel() {
                 onChange={(e) => setForm({ ...form, minecraft_version: e.target.value })}
               >
                 <option value="">Version Minecraft</option>
-                <option value="1.21.5">1.21.5</option>
-                <option value="1.21.4">1.21.4</option>
-                <option value="1.21.3">1.21.3</option>
-                <option value="1.21.2">1.21.2</option>
-                <option value="1.21.1">1.21.1</option>
-                <option value="1.21">1.21</option>
-                <option value="1.20.6">1.20.6</option>
-                <option value="1.20.4">1.20.4</option>
-                <option value="1.20.3">1.20.3</option>
-                <option value="1.20.2">1.20.2</option>
-                <option value="1.20.1">1.20.1</option>
-                <option value="1.20">1.20</option>
-                <option value="1.19.4">1.19.4</option>
-                <option value="1.19.3">1.19.3</option>
-                <option value="1.19.2">1.19.2</option>
-                <option value="1.18.2">1.18.2</option>
-                <option value="1.17.1">1.17.1</option>
-                <option value="1.16.5">1.16.5</option>
-                <option value="1.16.4">1.16.4</option>
-                <option value="1.16.3">1.16.3</option>
-                <option value="1.15.2">1.15.2</option>
-                <option value="1.14.4">1.14.4</option>
-                <option value="1.12.2">1.12.2</option>
-                <option value="1.10.2">1.10.2</option>
-                <option value="1.8.9">1.8.9</option>
+                {MC_VERSIONS.map(v => (
+                  <option key={v} value={v}>{v}</option>
+                ))}
               </select>
               <input
                 type="number"
@@ -230,28 +283,18 @@ export default function AdminPanel() {
                 value={form.memory_min}
                 onChange={(e) => setForm({ ...form, memory_min: e.target.value })}
               >
-                <option value="512M">RAM Minima: 512M</option>
-                <option value="1G">RAM Minima: 1G</option>
-                <option value="2G">RAM Minima: 2G</option>
-                <option value="3G">RAM Minima: 3G</option>
-                <option value="4G">RAM Minima: 4G</option>
-                <option value="6G">RAM Minima: 6G</option>
-                <option value="8G">RAM Minima: 8G</option>
+                {RAM_MIN.map(r => (
+                  <option key={r} value={r}>RAM Minima: {r}</option>
+                ))}
               </select>
               <select
                 className="modpack-loader-select"
                 value={form.memory_max}
                 onChange={(e) => setForm({ ...form, memory_max: e.target.value })}
               >
-                <option value="1G">RAM Maxima: 1G</option>
-                <option value="2G">RAM Maxima: 2G</option>
-                <option value="3G">RAM Maxima: 3G</option>
-                <option value="4G">RAM Maxima: 4G</option>
-                <option value="6G">RAM Maxima: 6G</option>
-                <option value="8G">RAM Maxima: 8G</option>
-                <option value="10G">RAM Maxima: 10G</option>
-                <option value="12G">RAM Maxima: 12G</option>
-                <option value="16G">RAM Maxima: 16G</option>
+                {RAM_MAX.map(r => (
+                  <option key={r} value={r}>RAM Maxima: {r}</option>
+                ))}
               </select>
             </div>
             <label className="folder-upload">
@@ -272,9 +315,16 @@ export default function AdminPanel() {
                 <p className="folder-count">{folder.length} archivos</p>
               </div>
             )}
-            <button type="submit" disabled={uploading}>
-              {uploading ? uploadProgress : 'Agregar Modpack'}
-            </button>
+            <div className="modpack-form-actions">
+              <button type="submit" disabled={uploading}>
+                {uploading ? uploadProgress : editing ? 'Guardar Cambios' : 'Agregar Modpack'}
+              </button>
+              {editing && (
+                <button type="button" className="btn-cancel" onClick={handleCancelEdit}>
+                  Cancelar
+                </button>
+              )}
+            </div>
           </form>
 
           <div className="modpacks-list">
@@ -285,9 +335,14 @@ export default function AdminPanel() {
                   <strong>{mp.name}</strong>
                   <span>{mp.minecraft_version} · {mp.loader || 'forge'} · {mp.mod_count} mods · RAM {mp.memory_min || '2G'}-{mp.memory_max || '4G'}</span>
                 </div>
-                <button className="btn-delete" onClick={() => handleDeleteModpack(mp.id)}>
-                  Eliminar
-                </button>
+                <div className="modpack-item-actions">
+                  <button className="btn-edit" onClick={() => handleEditModpack(mp)}>
+                    Editar
+                  </button>
+                  <button className="btn-delete" onClick={() => handleDeleteModpack(mp.id)}>
+                    Eliminar
+                  </button>
+                </div>
               </div>
             ))}
           </div>

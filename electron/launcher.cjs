@@ -32,9 +32,22 @@ function isModpackInstalled(modpackId) {
   }
 }
 
-function markModpackInstalled(modpackId) {
+function markModpackInstalled(modpackId, updatedAt, fileHash) {
   const marker = path.join(getModpackDir(modpackId), '.installed')
-  fs.writeFileSync(marker, new Date().toISOString())
+  fs.writeFileSync(marker, JSON.stringify({ installedAt: new Date().toISOString(), updatedAt: updatedAt || null, fileHash: fileHash || null }))
+}
+
+function getModpackStatus(modpackId) {
+  const markerPath = path.join(getMCDir(), 'modpacks', modpackId, '.installed')
+  try {
+    if (!fs.existsSync(markerPath)) return { installed: false, fileHash: null }
+    const content = fs.readFileSync(markerPath, 'utf-8')
+    let data
+    try { data = JSON.parse(content) } catch { data = { fileHash: null } }
+    return { installed: true, fileHash: data.fileHash || null }
+  } catch {
+    return { installed: false, fileHash: null }
+  }
 }
 
 async function installModpackFile(modpackId, fileName, fileBuffer) {
@@ -131,10 +144,20 @@ async function launchMinecraft(modpackId, mcVersion, loader, username, event, me
   }
 }
 
+function uninstallModpack(modpackId) {
+  const dir = path.join(getMCDir(), 'modpacks', modpackId)
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true })
+  }
+  return { success: true }
+}
+
 module.exports = {
   installModpackFile,
   isModpackInstalled,
   markModpackInstalled,
+  getModpackStatus,
+  uninstallModpack,
   launchMinecraft,
   getModpackDir,
   getMCDir,

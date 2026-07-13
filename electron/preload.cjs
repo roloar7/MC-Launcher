@@ -11,8 +11,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   isModpackInstalled: (modpackId) =>
     ipcRenderer.invoke('is-modpack-installed', modpackId),
 
-  markModpackInstalled: (modpackId) =>
-    ipcRenderer.invoke('mark-modpack-installed', modpackId),
+  markModpackInstalled: (modpackId, updatedAt, fileHash) =>
+    ipcRenderer.invoke('mark-modpack-installed', modpackId, updatedAt, fileHash),
+
+  getModpackStatus: (modpackId) =>
+    ipcRenderer.invoke('get-modpack-status', modpackId),
+
+  uninstallModpack: (modpackId) =>
+    ipcRenderer.invoke('uninstall-modpack', modpackId),
 
   launchMinecraft: (modpackId, mcVersion, loader, username, memoryMin, memoryMax) =>
     ipcRenderer.invoke('launch-minecraft', modpackId, mcVersion, loader, username, memoryMin, memoryMax),

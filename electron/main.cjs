@@ -5,6 +5,8 @@ const {
   installModpackFile,
   isModpackInstalled,
   markModpackInstalled,
+  getModpackStatus,
+  uninstallModpack,
   launchMinecraft,
 } = require('./launcher.cjs')
 
@@ -38,9 +40,17 @@ function createWindow() {
     return isModpackInstalled(modpackId)
   })
 
-  ipcMain.handle('mark-modpack-installed', async (event, modpackId) => {
-    markModpackInstalled(modpackId)
+  ipcMain.handle('mark-modpack-installed', async (event, modpackId, updatedAt, fileHash) => {
+    markModpackInstalled(modpackId, updatedAt, fileHash)
     return { success: true }
+  })
+
+  ipcMain.handle('get-modpack-status', async (event, modpackId) => {
+    return getModpackStatus(modpackId)
+  })
+
+  ipcMain.handle('uninstall-modpack', async (event, modpackId) => {
+    return uninstallModpack(modpackId)
   })
 
   ipcMain.handle('launch-minecraft', async (event, modpackId, mcVersion, loader, username, memoryMin, memoryMax) => {

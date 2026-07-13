@@ -12,6 +12,7 @@ export default function Modpacks() {
   const [installing, setInstalling] = useState(null)
   const [installStatus, setInstallStatus] = useState('')
   const [installed, setInstalled] = useState({})
+  const [needsUpdate, setNeedsUpdate] = useState({})
   const [launching, setLaunching] = useState(null)
 
   const gradients = [
@@ -32,8 +33,21 @@ export default function Modpacks() {
   useEffect(() => {
     if (!isElectron) return
     modpacks.forEach(async (mp) => {
-      const ok = await window.electronAPI.isModpackInstalled(mp.id)
-      setInstalled(prev => ({ ...prev, [mp.id]: ok }))
+      const status = await window.electronAPI.getModpackStatus(mp.id)
+      setInstalled(prev => ({ ...prev, [mp.id]: status.installed }))
+      if (status.installed) {
+        if (status.fileHash) {
+          const { data: files } = await getModpackFiles(mp.id)
+          if (files && files.length > 0) {
+            const currentHash = files.map(f => f.path).sort().join('|')
+            setNeedsUpdate(prev => ({ ...prev, [mp.id]: status.fileHash !== currentHash }))
+          } else {
+            setNeedsUpdate(prev => ({ ...prev, [mp.id]: true }))
+          }
+        } else {
+          setNeedsUpdate(prev => ({ ...prev, [mp.id]: false }))
+        }
+      }
     })
   }, [modpacks])
 
@@ -63,14 +77,27 @@ export default function Modpacks() {
       }
     }
 
-    await window.electronAPI.markModpackInstalled(mp.id)
+    const fileHash = files ? files.map(f => f.path).sort().join('|') : null
+    await window.electronAPI.markModpackInstalled(mp.id, mp.updated_at, fileHash)
 
     setInstallStatus(`${mp.name} instalado. Haz clic en Jugar para descargar Minecraft y jugar.`)
     setInstalled(prev => ({ ...prev, [mp.id]: true }))
+    setNeedsUpdate(prev => ({ ...prev, [mp.id]: false }))
     setTimeout(() => {
       setInstalling(null)
       setInstallStatus('')
     }, 3000)
+  }
+
+  async function handleUninstall(mp) {
+    if (!isElectron) return
+    if (!confirm(`¿Eliminar ${mp.name} y todos sus archivos?`)) return
+
+    setInstallStatus(`Desinstalando ${mp.name}...`)
+    await window.electronAPI.uninstallModpack(mp.id)
+    setInstalled(prev => ({ ...prev, [mp.id]: false }))
+    setInstallStatus(`${mp.name} desinstalado.`)
+    setTimeout(() => setInstallStatus(''), 2000)
   }
 
   async function handlePlay(mp) {
@@ -146,13 +173,32 @@ export default function Modpacks() {
             </div>
             <div className="modpack-actions">
               {installed[mp.id] ? (
-                <button
-                  className="modpack-play"
-                  onClick={() => handlePlay(mp)}
-                  disabled={launching !== null}
-                >
-                  {launching === mp.id ? 'Iniciando...' : 'Jugar'}
-                </button>
+                <>
+                  {needsUpdate[mp.id] ? (
+                    <button
+                      className="modpack-update"
+                      onClick={() => handleInstall(mp)}
+                      disabled={installing !== null || launching !== null}
+                    >
+                      {installing === mp.id ? 'Actualizando...' : 'Actualizar'}
+                    </button>
+                  ) : (
+                    <button
+                      className="modpack-play"
+                      onClick={() => handlePlay(mp)}
+                      disabled={launching !== null}
+                    >
+                      {launching === mp.id ? 'Iniciando...' : 'Jugar'}
+                    </button>
+                  )}
+                  <button
+                    className="modpack-uninstall"
+                    onClick={() => handleUninstall(mp)}
+                    disabled={launching !== null}
+                  >
+                    Desinstalar
+                  </button>
+                </>
               ) : (
                 <button
                   className="modpack-install"
