@@ -121,6 +121,21 @@
   flex: 1;
 }
 
+.modpack-loader-select {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  cursor: pointer;
+  outline: none;
+}
+
+.modpack-loader-select:focus {
+  border-color: var(--color-primary);
+}
+
 .modpack-form button {
   padding: 10px;
   border: none;
@@ -134,6 +149,54 @@
 
 .modpack-form button:hover {
   background: var(--color-success-hover);
+}
+
+.modpack-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.folder-upload {
+  cursor: pointer;
+}
+
+.folder-upload input {
+  display: none;
+}
+
+.folder-upload-btn {
+  display: block;
+  padding: 12px;
+  border: 2px dashed var(--border-color-light);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.folder-upload:hover .folder-upload-btn {
+  border-color: var(--color-primary);
+  color: var(--text-secondary);
+}
+
+.folder-preview {
+  padding: 10px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+}
+
+.folder-preview .folder-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: var(--fs-base);
+}
+
+.folder-preview .folder-count {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
 }
 
 .modpacks-list {

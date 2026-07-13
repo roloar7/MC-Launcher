@@ -1,6 +1,12 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const { initUpdater } = require('./updater.cjs')
+const {
+  installModpackFile,
+  isModpackInstalled,
+  markModpackInstalled,
+  launchMinecraft,
+} = require('./launcher.cjs')
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -23,6 +29,23 @@ function createWindow() {
     win.loadURL('http://localhost:5173')
     win.webContents.openDevTools()
   }
+
+  ipcMain.handle('install-modpack-file', async (event, modpackId, fileName, fileBuffer) => {
+    return installModpackFile(modpackId, fileName, fileBuffer)
+  })
+
+  ipcMain.handle('is-modpack-installed', async (event, modpackId) => {
+    return isModpackInstalled(modpackId)
+  })
+
+  ipcMain.handle('mark-modpack-installed', async (event, modpackId) => {
+    markModpackInstalled(modpackId)
+    return { success: true }
+  })
+
+  ipcMain.handle('launch-minecraft', async (event, modpackId, mcVersion, loader, username, memoryMin, memoryMax) => {
+    return launchMinecraft(modpackId, mcVersion, loader, username, event, memoryMin, memoryMax)
+  })
 }
 
 app.whenReady().then(() => {

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { signOut } from '../utils/auth'
+import { getSetting } from '../utils/settings'
 import AdminPanel from './AdminPanel'
 import Modpacks from './Modpacks'
 import Servidor from './Servidor'
@@ -12,6 +13,13 @@ const isElectron = !!window.electronAPI
 export default function Home() {
   const { user, setUser } = useAuth()
   const [page, setPage] = useState('home')
+  const [downloadUrl, setDownloadUrl] = useState('')
+
+  useEffect(() => {
+    getSetting('download_url').then(url => {
+      if (url) setDownloadUrl(url)
+    })
+  }, [])
 
   async function handleSignOut() {
     await signOut()
@@ -60,8 +68,8 @@ export default function Home() {
           <>
             <p>Bienvenido, <strong>{user?.username || user?.email}</strong></p>
             <p>Rol: <strong>{user?.role}</strong></p>
-            {!isElectron && (
-              <a href="https://github.com/roloar7/MC-Launcher/releases/download/v1.0.0/MC-Launcher%20Setup%201.0.0.exe" download className="download-btn-home">
+            {!isElectron && downloadUrl && (
+              <a href={downloadUrl} download className="download-btn-home">
                 Descargar Launcher
               </a>
             )}
